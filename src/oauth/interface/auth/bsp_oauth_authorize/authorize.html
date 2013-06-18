@@ -1,0 +1,114 @@
+<%@page language="abap" %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SAP OAuth - Authorize App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAP OAuth - Authorize an application">
+    <meta name="author" content="Ctac N.V.">
+    <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="lib/css/oauth.css" rel="stylesheet">
+    <script src="lib/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+  </head>
+  <body>
+    <div class="container">
+      <div class="box-white" style="margin: 0 auto; max-width: 400px;">
+        <h3>SAP OAuth - Authorize App</h3>
+      </div>
+      <br>
+      <div class="box-white" style="margin: 0 auto; max-width: 400px;">
+        <form action="authorize.do" method="POST">
+          <input id="oauth_token" name="oauth_token" type="hidden" value="<%= oauth_token %>">
+          <input id="authenticity_token" name="authenticity_token" type="hidden" value="<%= authenticity_token %>">
+          <h4>Authorize <%= client_name %> to access SAP?</h4>
+          <p><small>Authorization will be linked to user <strong><%= sy-uname %></strong></small></p>
+          <p>
+            <button type="submit" class="btn btn-primary">Authorize App</button>
+<%
+  if oauth_callback is not initial and oauth_callback <> `oob`.
+%>
+<a href="<%= oauth_callback %>?denied=<%= oauth_token %>" class="btn">Cancel</a>
+<%
+  endif.
+%>
+    </p>
+  </form>
+</div>
+<br>
+<div class="box-white" style="margin: 0 auto; max-width: 400px;">
+  <div>
+    <h4><%= client_name %></h4>
+    <ul class="unstyled">
+      <li><%= client_description %></li>
+      <li><%= client_company %></li>
+      <li><a href="<%= client_url %>"><%= client_url %></a></li>
+    </ul>
+<%
+  if permissions->size( ) = 0.
+%>
+<p>
+  <span class="label label-important">This app has no permissions.</span>
+</p>
+<%
+  else.
+%>
+<p>
+  <span class="label label-success">This app will have these permissions:</span>
+</p>
+<blockquote>
+<%
+  data it_permissions type ref to /oop/if_iterator.
+  it_permissions = permissions->iterator( ).
+  while it_permissions->hasnext( ) = abap_true.
+  data permission type ref to /oop/cl_oauth_permission.
+  permission ?= it_permissions->next( ).
+  data resource_id type /oop/resourceid.
+  resource_id = permission->resource_id( ).
+%>
+<dl><dt><%= resource_id %></dt><dd>
+<%
+  if permission->CREATE_ALLOWED( ) = abap_true.
+%>
+<span class="label">CREATE</span>
+<%
+  endif.
+  if permission->READ_ALLOWED( ) = abap_true.
+%>
+<span class="label">READ</span>
+<%
+  endif.
+  if permission->UPDATE_ALLOWED( ) = abap_true.
+%>
+<span class="label">UPDATE</span>
+<%
+  endif.
+  if permission->DELETE_ALLOWED( ) = abap_true.
+%>
+<span class="label">DELETE</span>
+<%
+  endif.
+  if permission->HEAD_ALLOWED( ) = abap_true.
+%>
+<span class="label">HEAD</span>
+<%
+  endif.
+%>
+</dd></dl>
+<%
+  endwhile.
+  endif.
+%>
+</blockquote>
+        </div>
+      </div>
+    </div>
+    <script src="lib/js/jquery.js"></script>
+    <script src="lib/js/bootstrap.js"></script>
+  </body>
+</html>

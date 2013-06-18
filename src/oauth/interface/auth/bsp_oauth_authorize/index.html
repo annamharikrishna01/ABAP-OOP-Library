@@ -1,0 +1,40 @@
+<%@page language="abap" %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SAP OAuth - Authorize App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAP OAuth - Authorize an application">
+    <meta name="author" content="Ctac N.V.">
+    <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="lib/css/oauth.css" rel="stylesheet">
+    <script src="lib/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+  </head>
+  <body>
+    <div class="container">
+      <div class="box-white" style="margin: 0 auto; max-width: 400px;">
+        <h3>SAP OAuth - Authorize App</h3>
+      </div>
+      <br>
+      <div class="box-white" style="margin: 0 auto; max-width: 400px;">
+        <form action="authorize.do" method="POST">
+          <input id="oauth_token" name="oauth_token" type="hidden" value="<%= oauth_token %>">
+          <h4>Login with your SAP account</h4>
+          <p><small>After logging in you will be able to authorize the app</small></p>
+          <p><input type="text" id="inputUsername" name="username" placeholder="Username"></p>
+          <p><input type="password" id="inputPassword" name="password" placeholder="Password"></p>
+          <p><button type="submit" class="btn">Sign in</button></p>
+          <p class="label label-important"><%= message %></p>
+        </form>
+      </div>
+    </div>
+    <script src="lib/js/jquery.js"></script>
+    <script src="lib/js/bootstrap.js"></script>
+  </body>
+</html>

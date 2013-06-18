@@ -1,0 +1,56 @@
+<%@page language="abap" %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SAP OAuth - Authorize App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAP OAuth - Authorize an application">
+    <meta name="author" content="Ctac N.V.">
+    <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="lib/css/oauth.css" rel="stylesheet">
+    <script src="lib/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+  </head>
+  <body>
+    <div class="container">
+      <div class="box-white" style="margin: 0 auto; max-width: 400px;">
+        <h3>SAP OAuth - Authorize App</h3>
+      </div>
+      <br>
+      <div class="box-white" style="margin: 0 auto; max-width: 400px;">
+        <h4>Oops, something went wrong</h4>
+<%
+  case ERROR_TYPE.
+  when /OOP/CL_OAUTH_BSP_AUTH_CONTR=>TOKEN_NOT_FOUND.
+%>
+<p>The request token is invalid. The token could already have been used, or maybe it is too old and has expired. Go back to the app and try again.</p>
+<%
+  when /OOP/CL_OAUTH_BSP_AUTH_CONTR=>TOKEN_ALREADY_AUTHORIZED.
+%>
+<p>The request token has already been used. Go back to the app and try again.</p>
+<%
+  when /OOP/CL_OAUTH_BSP_AUTH_CONTR=>CLIENT_NOT_FOUND.
+%>
+<p>The app you are trying to authorize is unknown. Please contact the author of the app.</p>
+<%
+  when /OOP/CL_OAUTH_BSP_AUTH_CONTR=>token_authenticity_invalid.
+%>
+<p>The authenticity of the token request was invalid. This could happen when something went wrong in a previous authorization request. Go back to the app and try again.</p>
+<%
+  when others.
+%>
+<p>An unkown error occured, please contact support.</p>
+<%
+  endcase.
+%>
+      </div>
+    </div>
+    <script src="lib/js/jquery.js"></script>
+    <script src="lib/js/bootstrap.js"></script>
+  </body>
+</html>

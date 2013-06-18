@@ -1,0 +1,56 @@
+<%@page language="abap" %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SAP OAuth - Authorize App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAP OAuth - Authorize an application">
+    <meta name="author" content="Ctac N.V.">
+<%
+  if oauth_callback is not initial and oauth_callback <> `oob`.
+%>
+<meta http-equiv="refresh" content="2;url=<%= oauth_callback %>?oauth_token=<%= oauth_token %>&oauth_verifier=<%= oauth_verifier %>">
+<%
+  endif.
+%>
+  <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+  <link href="lib/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="lib/css/oauth.css" rel="stylesheet">
+  <script src="lib/js/respond.js"></script>
+  <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->
+  <link rel="shortcut icon" href="img/favicon.ico">
+</head>
+<body>
+  <div class="container">
+    <div class="box-white" style="margin: 0 auto; max-width: 400px;">
+      <h3>SAP OAuth - Authorize App</h3>
+    </div>
+    <br>
+    <div class="box-white" style="margin: 0 auto; max-width: 400px;">
+      <div>
+        <h4>App authorized</h4>
+<%
+  if oauth_callback is not initial and oauth_callback <> `oob`.
+%>
+        <ul class="unstyled">
+          <li><strong>You will now return to the app.</strong></li>
+          <li>If the browser does not return you to the app, <a href="<%= oauth_callback %>?oauth_token=<%= oauth_token %>&oauth_verifier=<%= oauth_verifier %>">click here to continue</a>.</li>
+          </ul>
+<%
+  else.
+%>
+        <p>Enter the following verification code into the app.</p>
+        <p><span class="btn btn-large btn-block btn-primary disabled"><%= oauth_Verifier %></span></p>
+<%
+  endif.
+%>
+        </div>
+      </div>
+    </div>
+    <script src="lib/js/jquery.js"></script>
+    <script src="lib/js/bootstrap.js"></script>
+  </body>
+</html>
